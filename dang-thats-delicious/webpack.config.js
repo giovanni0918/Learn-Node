@@ -17,7 +17,7 @@ const javascript = {
   test: /\.(js)$/, // see how we match anything that ends in `.js`? Cool
   use: [{
     loader: 'babel-loader',
-    options: { presets: ['es2015'] } // this is one way of passing options
+    options: { presets: ['env'] } // this is one way of passing options
   }],
 };
 
@@ -25,12 +25,12 @@ const javascript = {
   This is our postCSS loader which gets fed into the next loader. I'm setting it up in it's own variable because its a didgeridog
 */
 
-const postcss = {
-  loader: 'postcss-loader',
-  options: {
-    plugins() { return [autoprefixer({ browsers: 'last 3 versions' })]; }
-  }
-};
+// const postcss = {
+//   loader: 'postcss-loader',
+//   options: {
+//     plugins() { return [autoprefixer({ browsers: 'last 3 versions' })]; }
+//   }
+// };
 
 // this is our sass/css loader. It handles files that are require('something.scss')
 const styles = {
@@ -38,13 +38,17 @@ const styles = {
   // here we pass the options as query params b/c it's short.
   // remember above we used an object for each loader instead of just a string?
   // We don't just pass an array of loaders, we run them through the extract plugin so they can be outputted to their own .css file
-  use: ExtractTextPlugin.extract(['css-loader?sourceMap', postcss, 'sass-loader?sourceMap'])
+  use: [
+    { loader: 'style-loader' },
+    { loader: 'css-loader' },
+    { loader: 'sass-loader' }
+  ]
 };
 
 // We can also use plugins - this one will compress the crap out of our JS
-const uglify = new webpack.optimize.UglifyJsPlugin({ // eslint-disable-line
-  compress: { warnings: false }
-});
+// const uglify = new webpack.optimize.UglifyJsPlugin({ // eslint-disable-line
+//   compress: { warnings: false }
+// });
 
 // OK - now it's time to put it all together
 const config = {

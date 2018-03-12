@@ -6,7 +6,12 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const passport = require('passport');
-const promisify = require('es6-promisify');
+
+const {promisify} = require("es6-promisify");
+
+// Now uses Bluebird
+promisify.Promise = require("bluebird");
+
 const flash = require('connect-flash');
 const expressValidator = require('express-validator');
 const routes = require('./routes/index');
